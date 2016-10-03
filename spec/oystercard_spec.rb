@@ -21,11 +21,6 @@ describe Oystercard do
     expect{card.touch_in}.to raise_error("Not enough funds on card, please top up")
   end
 
-  it "money can be decuted from the card" do
-    topped_up_card.deduct(8)
-    expect(topped_up_card.balance).to eq 2
-  end
-
   it "is able to start a journey by touching in" do
     topped_up_card.touch_in
     expect(topped_up_card).to be_in_journey
@@ -34,6 +29,10 @@ describe Oystercard do
   it "is able to end a journey by touching out" do
     card.touch_out
     expect(card).not_to be_in_journey
+  end
+
+  it "makes you pay £1 for a journey when you touch out" do
+    expect{topped_up_card.touch_out}.to change{topped_up_card.balance}.by(-1)
   end
 
 end
