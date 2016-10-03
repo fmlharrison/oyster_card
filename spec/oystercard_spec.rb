@@ -21,4 +21,15 @@ describe Oystercard do
     card.deduct(3)
     expect(card.balance).to eq 2
   end
+
+  it "is able to start a journey by touching in" do
+    card.touch_in
+    expect(card).to be_in_journey
+  end
+
+  it "is able to end a journey by touching out" do
+    card.touch_out
+    expect(card).not_to be_in_journey
+  end
+
 end
