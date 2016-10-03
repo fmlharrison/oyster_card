@@ -28,23 +28,53 @@ describe Oystercard do
   end
 
   it "is able to end a journey by touching out" do
-    card.touch_out
+    card.touch_out(station)
     expect(card).not_to be_in_journey
   end
 
   it "makes you pay £1 for a journey when you touch out" do
-    expect{topped_up_card.touch_out}.to change{topped_up_card.balance}.by(-1)
+    expect{topped_up_card.touch_out(station)}.to change{topped_up_card.balance}.by(-1)
   end
 
   it "remembers the entry station after touch in" do
     topped_up_card.touch_in(station)
-    expect(topped_up_card.entry_station).to eq station
+    expect(topped_up_card.current_journey[:entry_station]).to eq station
   end
 
   it "forgets the entry station after touch out" do
     topped_up_card.touch_in(station)
-    topped_up_card.touch_out
-    expect(topped_up_card.entry_station).to be nil
+    topped_up_card.touch_out(station)
+    expect(topped_up_card.current_journey[:entry_station]).to be nil
+  end
+
+  it "has an empty journey list initially" do
+    expect(card.journey_list).to eq([])
+  end
+
+  it "remembers exit station after touch_out" do
+    topped_up_card.touch_out(station)
+    expect(topped_up_card.current_journey[:exit_station]).to be station
+  end
+
+  it "forgets exit station at touch in" do
+    topped_up_card.touch_in(station)
+    expect(topped_up_card.current_journey[:exit_station]).to be nil
+  end
+
+  it "saves the entry station of the journey on touch in" do
+    topped_up_card.touch_in(station)
+    expect(topped_up_card.current_journey[:entry_station]).to eq station
+  end
+
+  it "saves the exit station of the journey on touch out" do
+    topped_up_card.touch_out(station)
+    expect(topped_up_card.current_journey[:exit_station]).to eq station
+  end
+
+  it "creates a journey from touch in and out" do
+    topped_up_card.touch_in(station)
+    topped_up_card.touch_out(station)
+    expect(topped_up_card.journey_list.count).to eq(1)
   end
 
 end
