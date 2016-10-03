@@ -3,6 +3,7 @@ require 'oystercard'
 describe Oystercard do
   subject(:card) {described_class.new}
   subject(:topped_up_card) {described_class.new(10)}
+  let(:station) {double ("station")}
 
   it "has a balance of 0 to start with" do
     expect(card.balance).to eq(0)
@@ -18,11 +19,11 @@ describe Oystercard do
   end
 
   it "doesn't let you touch in if the card has let than £1 on it" do
-    expect{card.touch_in}.to raise_error("Not enough funds on card, please top up")
+    expect{card.touch_in(station)}.to raise_error("Not enough funds on card, please top up")
   end
 
   it "is able to start a journey by touching in" do
-    topped_up_card.touch_in
+    topped_up_card.touch_in(station)
     expect(topped_up_card).to be_in_journey
   end
 
@@ -33,6 +34,17 @@ describe Oystercard do
 
   it "makes you pay £1 for a journey when you touch out" do
     expect{topped_up_card.touch_out}.to change{topped_up_card.balance}.by(-1)
+  end
+
+  it "remembers the entry station after touch in" do
+    topped_up_card.touch_in(station)
+    expect(topped_up_card.entry_station).to eq station
+  end
+
+  it "forgets the entry station after touch out" do
+    topped_up_card.touch_in(station)
+    topped_up_card.touch_out
+    expect(topped_up_card.entry_station).to be nil
   end
 
 end
