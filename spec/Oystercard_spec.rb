@@ -28,14 +28,7 @@ subject(:topped_up_card) {described_class.new(10)}
 		it 'Sets a maxium of 90' do
 			expect{oyster_card.top_up(95)}.to raise_error "Card limit reached(£#{OysterCard::MAX_VALUE})"
 		end
-	end
-
-	describe '#deduct' do
-		it 'deducts money from the card' do
-			topped_up_card.deduct(5)
-			expect(topped_up_card.balance).to eq 5
-		end
-	end
+	end	
 
  	describe '#touch_in' do
 		it 'changes card to be on a journey when touched in' do
@@ -47,12 +40,15 @@ subject(:topped_up_card) {described_class.new(10)}
 			expect{oyster_card.touch_in}.to raise_error "Insufficient funds, please top up"
 		end
 	end
-
 	describe '#touch_out' do
 		it 'changes card to be not on a journey when touched out' do
 			topped_up_card.touch_out
 			expect(topped_up_card.in_journey?).to eq false
 		end
+
+		it 'deducts money from the card when touched out' do 
+			expect{topped_up_card.touch_out}.to change{topped_up_card.balance}.by(-1)
+		end 
 	end
 
 end
