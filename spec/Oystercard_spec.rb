@@ -36,13 +36,6 @@ let(:station) {double :station}
 		end
 	end
 
-	describe '#deduct' do
-		it 'deducts money from the card' do
-			topped_up_card.deduct(5)
-			expect(topped_up_card.balance).to eq 5
-		end
-	end
-
  	describe '#touch_in' do
 		it 'changes card to be on a journey when touched in' do
 			topped_up_card.touch_in(station)
@@ -56,6 +49,10 @@ let(:station) {double :station}
 		it 'sets an entry station on touch in' do
 			topped_up_card.touch_in(station)
 			expect(topped_up_card.entry_station).to eq station
+		end
+
+		it "it charges the MIN VALUE on touch in" do
+			expect{topped_up_card.touch_in(station)}.to change{topped_up_card.balance}.by(-OysterCard::MIN_VALUE)
 		end
 	end
 
