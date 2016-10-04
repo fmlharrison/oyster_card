@@ -27,4 +27,18 @@ subject(:topped_up_card) {described_class.new(10)}
 		expect(topped_up_card.balance).to eq 5
 	end
 
+	it 'initializes a not in journey' do 
+		expect(oyster_card.in_journey?).to eq false  
+	end 
+
+	it 'changes card to be on a journey when touched in' do 
+		topped_up_card.touch_in
+		expect(topped_up_card.in_journey?).to eq true 
+	end 
+
+	it 'changes card to be not on a journey when touched out' do 
+		topped_up_card.touch_out
+		expect(topped_up_card.in_journey?).to eq false
+	end 
+
 end
