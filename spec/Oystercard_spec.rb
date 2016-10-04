@@ -17,4 +17,8 @@ subject(:oyster_card) { OysterCard.new }
 		expect(subject.balance).to eq 10
 	end 
 
+	it 'Sets a maxium of 90' do 
+		expect{oyster_card.top_up(95)}.to raise_error 'Card limit reached(£90)' 
+	end 
+
 end 
