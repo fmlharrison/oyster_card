@@ -34,7 +34,7 @@ let(:station) {double :station}
 		it 'Sets a maxium of 90' do
 			expect{oyster_card.top_up(95)}.to raise_error "Card limit reached(£#{OysterCard::MAX_VALUE})"
 		end
-	end	
+	end
 
  	describe '#touch_in' do
 		it 'changes card to be on a journey when touched in' do
@@ -49,10 +49,6 @@ let(:station) {double :station}
 		it 'sets an entry station on touch in' do
 			topped_up_card.touch_in(station)
 			expect(topped_up_card.entry_station).to eq station
-		end
-
-		it "it charges the MIN VALUE on touch in" do
-			expect{topped_up_card.touch_in(station)}.to change{topped_up_card.balance}.by(-OysterCard::MIN_VALUE)
 		end
 	end
 	describe '#touch_out' do
@@ -71,9 +67,9 @@ let(:station) {double :station}
 			expect(topped_up_card.entry_station).to eq nil
 		end
 
-		it 'deducts money from the card when touched out' do 
+		it 'deducts money from the card when touched out' do
 			expect{topped_up_card.touch_out}.to change{topped_up_card.balance}.by(-1)
-		end 
+		end
 	end
 
 end

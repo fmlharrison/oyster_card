@@ -20,11 +20,11 @@ class OysterCard
 
 	def touch_in(station)
 		raise 'Insufficient funds, please top up' if balance < MIN_VALUE
-		deduct(MIN_VALUE)
 		@entry_station = station
 	end
 
 	def touch_out
+		deduct(MIN_VALUE)
 		@entry_station = nil
 	end
 
