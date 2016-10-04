@@ -38,6 +38,7 @@ class Oystercard
 
   def log_journey
     @journey_list << @current_journey
+    @current_journey = {entry_station: nil, exit_station: nil} 
   end
 
   def set_entry_station(place)
